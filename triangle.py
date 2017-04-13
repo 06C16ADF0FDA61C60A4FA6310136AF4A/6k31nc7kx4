@@ -1,28 +1,42 @@
 class Plex:
-    def __init__(self):
-        pass
-
-def tri(rows):
-    data = []
-    for r in range(rows):
-        row = []
-        for n in range(r+1): row+=[0]
-        data+=[row]
-    return data
-
-
-def iterate(data,a,b):
-    while a+b<len(data):
-        for r in range(len(data)):
-            line = data[r]
-            #print( line, b )
-            line[b]=1-line[b]
-            if line[b]: a+=1
-            else: b+=1
-    return data
+    def __init__(self,size):
+        bitdata = []
+        numdata = []
+        for r in range(size):
+            bit = []
+            num = []
+            for n in range(r+1):
+                bit+=[0]
+                num+=[0]
+            bitdata+=[bit]
+            numdata+=[num]
+        self.bitdata = bitdata
+        self.numdata = numdata
+    def bitGet(a,b):
+        return self.bitdata[a+b][b]
+    def bitFlip(a,b):
+        self.bitdata[a+b][b] = 1-self.bitdata[a+b][b]
+    def numGet(a,b):
+        return self.bitdata[a+b][b]
+    def numAdd(a,b,n):
+        self.bitdata[a+b][b] = 1-self.bitdata[a+b][b] 
+    def tracePath(self,a,b):
+        path = []
+        data = self.bitdata
+        while a+b<len(data):
+            for r in range(len(data)):
+                line = data[r]
+                #print( line, b )
+                line[b]=1-line[b]
+                if line[b]:
+                    a+=1
+                    path+=[0]
+                else:
+                    b+=1
+                    path+=[1]
+        self.bitdata = data
+        return path    
                 
-
-
 def display(data):
     size = 8
     for l in range(len(data)):
@@ -35,6 +49,22 @@ def display(data):
         print( emp+str(line) )
     print()
 
-triangle = tri(8)
-display(triangle)
-display(iterate(iterate(iterate(triangle,0,0),0,0),0,0))
+
+plex = Plex(8)
+
+while 1:
+    print()
+    path = plex.tracePath(0,0)
+    print( path )
+    print()
+    display(plex.bitdata)
+    input()
+
+
+import random, string
+
+
+s=string.lowercase+string.digits
+a=''.join(random.sample(s,10))
+
+print( a )
