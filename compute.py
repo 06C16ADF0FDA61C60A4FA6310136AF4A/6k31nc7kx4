@@ -1,17 +1,17 @@
 class Plex:
     def __init__(self,size):
-        bitdata = []
-        numdata = []
+        bdata = []
+        ndata = []
         for r in range(size):
-            bit = []
-            num = []
+            b = []
+            d = []
             for n in range(r+1):
-                bit+=[0]
-                num+=[0]
-            bitdata+=[bit]
-            numdata+=[num]
-        self.bitdata = bitdata
-        self.numdata = numdata
+                b+=[0]
+                d+=[0]
+            bdata+=[b]
+            ndata+=[d]
+        self.bitdata = bdata
+        self.numdata = ndata
     def bitGet(a,b):
         return self.bitdata[a+b][b]
     def bitFlip(a,b):
@@ -35,27 +35,43 @@ class Plex:
                     b+=1
                     path+=[1]
         self.bitdata = data
-        return path    
+        return path
                 
 def display(data):
-    size = 8
     for l in range(len(data)):
         l = len(data)-l-1
         line = data[l]
         emp = ''
-        for n in range(size-len(line)):
+        for n in range(len(data)-len(line)):
             if n%2: emp+=' '
             else: emp+='  '
         print( emp+str(line) )
     print()
 
+def compute(size):
+    plex = Plex(size)
+    index = []
+    for n in range(2**size):
+        index+=['']
+    for n in range(2**size):
+        path = plex.tracePath(0,0)
+        a = "".join(str(x) for x in path)
+        index[int(a,2)]+='|'+str(n)
+        print( path, int(a,2) )
+    print()
+    return plex,index
 
-plex = Plex(8)
+
+plex, index = compute(4)
+
+
+
 
 while 1:
     print()
     path = plex.tracePath(0,0)
-    print( path )
+    a = "".join(str(x) for x in path)
+    print( path, int(a,2) )
     print()
     display(plex.bitdata)
     input()
